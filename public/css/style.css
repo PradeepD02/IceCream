@@ -1,0 +1,16 @@
+body {
+    background:  white;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
+}
+
+.main-element{
+    margin-top: 10%;
+    margin-bottom: auto;
+}
+
+.card{
+    width: 40%;
+}

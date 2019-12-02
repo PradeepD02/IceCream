@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/css/style.css" />
+    <title>Assessment Record</title>
+    <script>
+        fetch(`https://source.unsplash.com/1600x900/?ice-cream`).then((response) => {
+            document.body.style.backgroundImage = 'url(' + response.url + ')';
+            console.log(response.url);
+        });
+    </script>
+</head>
+<body>
+    <div class="row h-100 main-element">
+        <div class="col-sm-12 my-auto">
+            <div class="card mx-auto my-auto">
+                <h5 class="card-header">Assessment Record</h5>
+                <div class="card-body">
+                    <div class="row justify-content-between">
+                        <div class="col-md-4">
+                            <select class="custom-select h-100" id="select" multiple>
+                                <option>7</option>
+                                <option>2</option>
+                                <option>3</option>
+                                <option>4</option>
+                                <option>5</option>
+                            </select>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="col-md">
+                                <div class="form-group row">
+                                    <label for="stationID" class="col-12 col-md-4 col-form-label">Station ID</label>
+                                    <div class="col-sm-6">
+                                        <input type="text" class="form-control" id="stationID" placeholder="">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md">
+                                <div class="form-group row">
+                                    <label for="date" class="col-12 col-md-4 col-form-label">Date</label>
+                                    <div class="col-sm-6">
+                                        <input type="text" class="form-control" id="date" placeholder="">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md">
+                                <div class="form-group row">
+                                    <label for="target" class="col-12 col-md-4 col-form-label">Target</label>
+                                    <div class="col-sm-6">
+                                        <input type="text" class="form-control" id="target" placeholder="">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md">
+                                <div class="form-group row">
+                                    <label for="actual" class="col-12 col-md-4 col-form-label">Actual</label>
+                                    <div class="col-sm-6">
+                                        <input type="text" class="form-control" id="actual" placeholder="">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md">
+                                <div class="form-group row">
+                                    <label for="variance" class="col-12 col-md-4 col-form-label">Variance</label>
+                                    <div class="col-sm-6">
+                                        <input type="text" class="form-control" id="variance" placeholder="">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
