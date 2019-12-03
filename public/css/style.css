@@ -19,3 +19,7 @@ input[readonly].disabled{
     background-color:transparent !important;
     font-size: 1em;
 }
+
+.alertdiv{
+    position: relative;  
+}

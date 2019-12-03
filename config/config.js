@@ -4,6 +4,7 @@ module.exports = {
         hostname: process.env.HOSTNAME || 'localhost',
     },
     database: {
-      url: 'mongodb://localhost:27017/icecream'
+      url: 'mongodb://localhost:27017/icecream',
+      name: 'icecream'
     }
   };

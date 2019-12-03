@@ -8,5 +8,6 @@ router.get('/stations/',StationController.list);
 router.get('/stations/add',StationController.add);
 router.get('/stations/:id',StationController.view);
 router.patch('/stations/:id',StationController.update);
+router.get('/stations/delete/:id',StationController.delete);
 
 module.exports = router;

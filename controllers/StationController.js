@@ -55,4 +55,15 @@ StationController.prototype.add = (async (req, res) => {
     }
 });
 
+StationController.prototype.delete = (async (req, res) => {
+    try {
+        const stations = await Station.remove(
+            {'id': req.params.id },
+        );
+        res.json(stations);
+    } catch (err) {
+        res.json({ message: err });
+    }
+});
+
 module.exports = new StationController();
