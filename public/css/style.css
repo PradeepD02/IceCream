@@ -20,6 +20,9 @@ input[readonly].disabled{
     font-size: 1em;
 }
 
-.alertdiv{
-    position: relative;  
+.alert-placeholder{
+    width : 100%;
+    margin-top: 2em;
+    height : 30px;
+    justify-content: center;
 }

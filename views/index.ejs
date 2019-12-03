@@ -115,7 +115,7 @@
         }
 
         function showAlert() {
-            $('.alert-placeholder').append('<div id="alertdiv" class="alert alert-success"><a class="close" data-dismiss="alert">×</a><span> Eine Station wurde hinzu gefügt! </span></div>')
+            $('.alert-placeholder').append('<div id="alertdiv" class="alert alert-success"><span> Eine Station wurde hinzugefügt! </span></div>')
             setTimeout(function() { 
             $("#alertdiv").remove();
             }, 5000);
@@ -131,8 +131,7 @@
     </script>
 </head>
 <body>
-    <div class="row col-sm-12 my-auto mx-auto justify-content-center alert-placeholder">
-        
+    <div class="row justify-content-center alert-placeholder">
     </div>
     <div class="row h-100 main-element">
         <div class="col-sm-12 my-auto">
