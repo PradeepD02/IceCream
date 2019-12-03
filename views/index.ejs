@@ -9,18 +9,38 @@
     <script src="/js/axios.min.js"></script>
     <title>Assessment Record</title>
     <script>
+        let currentID = null;
+        let oldStations = null;
+        let oldActual = null;
         fetch(`https://source.unsplash.com/1600x900/?ice-cream`).then((response) => {
             document.body.style.backgroundImage = 'url(' + response.url + ')';
         });
+
+        function arraysEqual(a, b) {
+            if (a === b) return true;
+            if (a == null || b == null) return false;
+            if (a.length != b.length) return false;
+
+            for (var i = 0; i < a.length; ++i) {
+                if (a[i] !== b[i]) return false;
+            }
+            return true;
+        }
+
         async function getStations() {
             try {
                 const response = await axios.get('/stations');
-                select = document.getElementById('select');
-                for (var data in response.data) {
-                    option = new Option(response.data[data]);
-                    option.id = response.data[data];
-                    option.setAttribute("onclick","getStationsDetails(" + response.data[data]+ ");");
+                let select = document.getElementById('select');
+                let stations = response.data;
+                if (!arraysEqual(oldStations, stations)) {
+                    document.getElementById("select").options.length = 0;
+                    for (var data in stations) {
+                    option = new Option(stations[data]);
+                    option.id = stations[data];
+                    option.setAttribute("onclick","getStationsDetails(" + stations[data]+ ");");
                     select.options[select.options.length] = option
+                    oldStations = stations;
+                }   
                 }
             } catch (error) {
                 console.error(error);
@@ -60,33 +80,43 @@
 
         async function getStationsDetails(id) {
             try {
+                currentID = id;
                 const response = await axios.get('/stations/' + id);
                 let actual = parseInt(response.data.actual);
-                let target = parseInt(response.data.target);
-                let variance = actual - target;
-                let percentage = getPercentageChange(target, actual);
-                let date = response.data.date.split("T")[0];
-                document.getElementById('hiddenID').value = id;
-                document.getElementById('stationID').value = response.data.id;
-                document.getElementById('date').value = date;
-                document.getElementById('target').value = response.data.target;
-                document.getElementById('actual').value = response.data.actual;
-                let varianceColor = document.getElementById('variance')
-                varianceColor.value = variance;
-                if (percentage >= 5) {
-                    varianceColor.style.color = "green";
-                } else if (percentage <= -10){
-                    varianceColor.style.color = "red";
-                } else {
-                    varianceColor.style.color = "";
+                if (actual !== oldActual) {
+                    let target = parseInt(response.data.target);
+                    let variance = actual - target;
+                    let percentage = getPercentageChange(target, actual);
+                    let date = response.data.date.split("T")[0];
+                    document.getElementById('hiddenID').value = id;
+                    document.getElementById('stationID').value = response.data.id;
+                    document.getElementById('date').value = date;
+                    document.getElementById('target').value = response.data.target;
+                    document.getElementById('actual').value = response.data.actual;
+                    let varianceColor = document.getElementById('variance')
+                    varianceColor.value = variance;
+                    if (percentage >= 5) {
+                        varianceColor.style.color = "green";
+                    } else if (percentage <= -10){
+                        varianceColor.style.color = "red";
+                    } else {
+                        varianceColor.style.color = "";
+                    }
+                    addOnchangeListener();
+                    oldActual = actual;
                 }
-                addOnchangeListener();
             } catch (error) {
                 console.error(error);
             }
         }
 
-        window.onload = getStations();
+        function liveReload(){
+            if (currentID !== null) {
+                getStationsDetails(currentID);
+            }
+            getStations();
+        }
+        window.onload = setInterval(liveReload, 1000);
     </script>
 </head>
 <body>
