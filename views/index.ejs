@@ -5,14 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/css/bootstrap-datepicker.min.css">
     <link rel="stylesheet" href="/css/style.css" />
-    <script src="/js/jquery-3.4.1.min.js"></script>
+    <script src="/js/jquery.min.js"></script>
     <script src="/js/axios.min.js"></script>
+    <script src="/js/bootstrap-datepicker.min.js"></script>
     <title>Assessment Record</title>
     <script>
         let currentID = null;
         let oldStations = null;
         let oldActual = null;
+        let oldDate = null;
+        let actualInPercent = false;
         fetch(`https://source.unsplash.com/1600x900/?ice-cream`).then((response) => {
             document.body.style.backgroundImage = 'url(' + response.url + ')';
         });
@@ -51,10 +55,10 @@
             }
         }
 
-        async function updateStation(id, value) {
+        async function updateStation(id, value, date) {
             try {
                 const response = await  axios.patch('/stations/' + id, {
-                'actual': value,
+                'actual': value, 'date': date,
             })
             .then((response) => {
             });
@@ -69,16 +73,50 @@
             return ((decreaseValue / oldNumber) * 100) * -1;
         }
 
+        function isNumeric(num){
+            if (!isNaN(num)) {
+                document.getElementById('actual').classList.remove("is-invalid");
+                return true;
+            } else {
+                document.getElementById('actual').classList.add("is-invalid");
+                return false;
+            }
+        }
+
+        function saveData(){
+            var value = document.getElementById('actual').value;
+            var date = document.getElementById('date').value;
+            var id = document.getElementById('hiddenID').value;
+            if (isNumeric(value)) {
+                updateStation(id, value, date);
+            }
+            return true;
+        }
+
         function addOnchangeListener(){
             var changed = false;
             var textarea = document.getElementById('actual');
-            if (textarea !== null) {
-                    textarea.onchange = function() {
-                    var value = document.getElementById('actual').value;
-                    var id = document.getElementById('hiddenID').value;
-                    changed = true;
-                    updateStation(id, value);
+            var datearea = document.getElementById('date');
+            if (textarea !== null && datearea !== null) {
+                textarea.onchange = function() {
+                    changed = saveData();
                 }
+                datearea.onchange = function() {
+                    changed = saveData();
+                }
+            }
+        }
+
+        function addOnClickListener(value, percentage){
+            textarea = document.getElementById('variance-label');
+            textarea.onclick = function() {
+                if ( !actualInPercent ) {
+                    document.getElementById('variance').value = percentage.toFixed(2) + "%";
+                    actualInPercent = true;
+                } else {
+                    document.getElementById('variance').value = value;
+                    actualInPercent = false;
+                } 
             }
         }
 
@@ -87,17 +125,20 @@
                 currentID = id;
                 const response = await axios.get('/stations/' + id);
                 let actual = parseInt(response.data.actual);
-                if (actual !== oldActual) {
-                    let target = parseInt(response.data.target);
-                    let variance = actual - target;
-                    let percentage = getPercentageChange(target, actual);
+                let date = response.data.date.split("T")[0];
+                isNumeric(document.getElementById('actual').value);
+                let target = parseInt(response.data.target);
+                let variance = actual - target;
+                let percentage = getPercentageChange(target, actual);
+                addOnClickListener(variance, percentage);
+                if (actual !== oldActual || date !== oldDate) {
                     let date = response.data.date.split("T")[0];
                     document.getElementById('hiddenID').value = id;
                     document.getElementById('stationID').value = response.data.id;
                     document.getElementById('date').value = date;
                     document.getElementById('target').value = response.data.target;
                     document.getElementById('actual').value = response.data.actual;
-                    let varianceColor = document.getElementById('variance')
+                    let varianceColor = document.getElementById('variance');
                     varianceColor.value = variance;
                     if (percentage >= 5) {
                         varianceColor.style.color = "green";
@@ -108,6 +149,7 @@
                     }
                     addOnchangeListener();
                     oldActual = actual;
+                    oldDate = date;
                 }
             } catch (error) {
                 console.error(error);
@@ -156,7 +198,7 @@
                                 <div class="form-group row">
                                     <label for="date" class="col-12 col-md-4 col-form-label">Date</label>
                                     <div class="col-sm-6">
-                                        <input type="text" class="form-control disabled" id="date" placeholder="" readonly>
+                                            <input type="date" class="form-control disabled" id="date" placeholder="" data-provide="datepicker">
                                     </div>
                                 </div>
                             </div>
@@ -179,7 +221,7 @@
                             </div>
                             <div class="col-md">
                                 <div class="form-group row">
-                                    <label for="variance" class="col-12 col-md-4 col-form-label">Variance</label>
+                                    <label class="col-12 col-md-4 col-form-label" id="variance-label">Variance</label>
                                     <div class="col-sm-6">
                                         <input type="text" class="form-control" id="variance" placeholder="" readonly>
                                     </div>
@@ -191,5 +233,8 @@
             </div>
         </div>
     </div>
+    <script>
+        $(document).off('.datepicker.data-api');
+    </script>
 </body>
 </html>

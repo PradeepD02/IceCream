@@ -33,7 +33,7 @@ StationController.prototype.update = (async (req, res) => {
     try {
         const stations = await Station.updateOne(
             {'id': req.params.id },
-            {$set: { actual: req.body.actual } }
+            {$set: { actual: req.body.actual, date: req.body.date } }
         );
         res.json(stations);
     } catch (err) {
