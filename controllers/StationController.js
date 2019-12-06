@@ -4,8 +4,23 @@ function StationController(){};
 
 StationController.prototype.index = (async (req, res) => {
     try {
-        const stations = await Station.find();
-        res.render('index', {stations: stations.map(({ id }) => id)});
+        res.render('index');
+    } catch (err) {
+        res.json({ message: err });
+    }
+});
+
+StationController.prototype.indexOne = (async (req, res) => {
+    try {
+        res.render('1/indexOne');
+    } catch (err) {
+        res.json({ message: err });
+    }
+});
+
+StationController.prototype.indexTwo = (async (req, res) => {
+    try {
+        res.render('2/indexTwo');
     } catch (err) {
         res.json({ message: err });
     }

@@ -4,6 +4,8 @@ var express = require('express')
 /*Station Routes*/
 var StationController = require("../controllers/StationController");
 router.get('/',StationController.index);
+router.get('/1/',StationController.indexOne);
+router.get('/2/',StationController.indexTwo);
 router.get('/stations/',StationController.list);
 router.get('/stations/add',StationController.add);
 router.get('/stations/:id',StationController.view);
