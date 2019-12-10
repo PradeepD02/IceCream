@@ -72,7 +72,7 @@ StationController.prototype.add = (async (req, res) => {
 
 StationController.prototype.delete = (async (req, res) => {
     try {
-        const stations = await Station.remove(
+        const stations = await Station.deleteOne(
             {'id': req.params.id },
         );
         res.json(stations);
