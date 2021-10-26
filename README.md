@@ -6,7 +6,7 @@ to tun in Docker change config/config.js url
 
 from:
 
-```mongodb://localhost:27017```
+```mongodb://admin:password@localhost:27017```
 
 to:
 
